@@ -50,7 +50,7 @@ def reproduce(population, fitness, mutation_rate):
     return new_population
 
 
-def pop_fitness(population, rcut, sigma, kernel, tgt_atoms, tgt_species, max_score=[-9999,'']):
+def pop_fitness(population, rcut, sigma, kernel, tgt_atoms, tgt_species, tgt_atoms2=None, max_score=[-9999,'']):
     """
     Calculates the fitness (ie SOAP similarity score) of the population by generating conformers for each of the
     population molecules, then evaluating their SOAP descriptors and calculating its similarity score with the SOAP
@@ -61,7 +61,7 @@ def pop_fitness(population, rcut, sigma, kernel, tgt_atoms, tgt_species, max_sco
     reproduction on the master node (since there is randomness), then broadcast to the other nodes
 
     :param population: list of RDKit molecule objects
-    :param tgt_atoms: list of ASE atom objects of the target ligand field - from read_xyz
+    :param tgt_atoms: list of ASE atom objects of the target ligand field - from read_xyz, second is optional if separate sites
     :param tgt_species: list of the atomic species present in the target ligand field - from read_xyz
     :param rcut, sigma: SOAP parameters
     :param max_score: Maximum SOAP similarity found so far
@@ -91,8 +91,11 @@ def pop_fitness(population, rcut, sigma, kernel, tgt_atoms, tgt_species, max_sco
                 species.append(symbol)
     if bad_mols != []:
         for bm in bad_mols:
-            population.remove(bm) # filter out molecules which have no conformers
-
+            bm = Chem.RemoveHs(bm)
+            try:
+                population.remove(bm) # filter out molecules which have no conformers
+            except:
+                continue
     # Check that we also include the atom types present in the ligand targets
     for atom in tgt_species:
         if atom not in species:
@@ -104,6 +107,8 @@ def pop_fitness(population, rcut, sigma, kernel, tgt_atoms, tgt_species, max_sco
     soap_generator = SOAP(species=species, periodic=False, rcut=rcut, nmax=8, lmax=6, sigma=sigma, sparse=True)
     soap = soap_generator.create(population_ase)
     tgt_soap = soap_generator.create(tgt_atoms)
+    if tgt_atoms2 is not None:
+        tgt_soap2 = [normalize(soap_generator.create(tgt_atoms2), copy=False)]
 
     # normalize SOAP atom descriptors and group by molecule
     soap = normalize(soap, copy=False)
@@ -115,24 +120,33 @@ def pop_fitness(population, rcut, sigma, kernel, tgt_atoms, tgt_species, max_sco
 
     # TODO make REMatch kernel args as input args
     if kernel == 'rematch':
-        soap_similarity = REMatchKernel(metric="polynomial", degree=3, gamma=1, coef0=0, alpha=0.1, threshold=1e-3,
-                                        normalize_kernel=True)
+        soap_similarity = REMatchKernel(metric="polynomial", degree=3, gamma=1, coef0=0, alpha=0.1, threshold=1e-3, normalize_kernel=True)
     elif kernel == 'average':
         soap_similarity = AverageKernel(metric="polynomial", degree=3, gamma=1, coef0=0, normalize_kernel=True)
-    fitness = soap_similarity.create(soap, tgt_soap)
-    fitness = fitness.flatten()
+    if tgt_atoms2 is not None:
+        fitness1 = soap_similarity.create(soap, tgt_soap)
+        fitness1.flatten()
+        fitness2 = soap_similarity.create(soap, tgt_soap2)
+        fitness2.flatten()
+        # calculate fitness score as product of the two fitnesses
+        fitness = np.multiply(fitness1, fitness2)
+        fitness = np.array([f[0] for f in fitness])
+    else:
+        fitness = soap_similarity.create(soap, tgt_soap)
+        fitness = fitness.flatten()
 
     t3 = time.time()
     print('Time taken to calculate fitness: {}'.format(t3-t2))
     # update max_score, include new champion
     if np.amax(fitness) > max_score[0]:
         max_score = [np.amax(fitness), Chem.MolToSmiles(population[np.argmax(fitness)])]
-
+    
     #Print the top 5 scores and corresponding molecules for a particular generation
     top_scores = np.flip(fitness[np.argsort(fitness)[-5:]])
-    print(top_scores)
+    # print(top_scores)
     for i in range(5):
         print("Mol {}: {} (fitness = {:.3f})".format(i, Chem.MolToSmiles(population[np.argsort(fitness)[-i-1]]), top_scores[i]))
+    
 
     fitness = fitness / np.sum(fitness)
 
@@ -143,9 +157,10 @@ def initialise_system(args):
     """
     Reads in a .csv file and generates a population of RDKit molecules, as well as reading in target ligand coordinates
 
-    :param args: system arguments parsed into main - should contain args.csv, args.tgt
+    :param args: system arguments parsed into main - should contain args.csv, args.tgt (and args.tgt2)
 
     :return: population, tgt_atoms, tg_species
+     or population, tgt_atoms, tgt_species, tgt_atoms2, tgt_species2
     """
     population = []
     csv = pd.read_csv(args.csv, header=0)
@@ -153,8 +168,12 @@ def initialise_system(args):
         population.append(Chem.MolFromSmiles(row['SMILES']))
 
     tgt_atoms, _, _, tgt_species = read_xyz(args.tgt)
-
-    return population, tgt_atoms, tgt_species
+    if args.tgt2 is not None:
+        tgt_atoms2, _, _, tgt_species2 = read_xyz(args.tgt2)
+        tgt_species = list(set().union(tgt_species, tgt_species2)) # creates a single tgt_species list
+        return population, tgt_atoms, tgt_species, tgt_atoms2
+    else:
+        return population, tgt_atoms, tgt_species
 
 
 def main(args):
@@ -171,7 +190,10 @@ def main(args):
     co.average_size = args.tgt_size  # read what this does
     co.size_stdev = args.size_stdev
 
-    population, tgt_atoms, tgt_species = initialise_system(args)
+    if args. tgt2 is not None:
+        population, tgt_atoms, tgt_species, tgt_atoms2 = initialise_system(args)
+    else:
+        population, tgt_atoms, tgt_species = initialise_system(args)
 
     print('\nInitial Population Size: {}'.format(len(population)))
     print('No. of generations: {}'.format(args.n_gens))
@@ -179,16 +201,15 @@ def main(args):
     print('')
 
     max_score = [-999, '']
-<<<<<<< HEAD
     f = open('champions.dat', 'w')
-=======
-    f = open('data/champions.dat', 'w')
 
->>>>>>> 7fbe49c9deaa46de90f96b518f7edc89b80f7fc2
     for generation in range(args.n_gens):
         print('\nGeneration #{}, population size: {}'.format(generation, len(population)))
         print('Calculating fitness...')
-        fitness, max_score = pop_fitness(population, args.rcut, args.sigma, args.kernel, tgt_atoms, tgt_species, max_score)
+        if args.tgt2 is not None:
+            fitness, max_score = pop_fitness(population, args.rcut, args.sigma, args.kernel, tgt_atoms, tgt_species, tgt_atoms2, max_score)
+        else:
+            fitness, max_score = pop_fitness(population, args.rcut, args.sigma, args.kernel, tgt_atoms, tgt_species, max_score)
         print('Producing next generation...')
         population = reproduce(population, fitness, args.mut_rate)
 
@@ -207,6 +228,8 @@ if __name__ == "__main__":
                         help='path to .csv file of initial population.')
     parser.add_argument('-tgt', type=str, default='data/xyz/all_ligands.xyz',
                         help='path to .xyz file containing binding fragments coordinates.')
+    parser.add_argument('-tgt2', type=str, default=None, 
+                        help="path to .xyz file of fragments of second site")
     parser.add_argument('-mut_rate', type=float, default=0.01,
                         help='Probability of mutations.')
     parser.add_argument('-n_gens', type=int, default=50,
