@@ -10,10 +10,10 @@ import pandas as pd
 from rdkit import Chem
 from rdkit.Chem import AllChem
 from dscribe.descriptors import SOAP
-from dscribe.kernels import REMatchKernel
+from dscribe.kernels import REMatchKernel, AverageKernel
 from sklearn.preprocessing import normalize
 
-from helper import split_by_lengths
+from helper import read_xyz, split_by_lengths
 # The following two are written by Jensen
 import crossover as co
 import mutate as mu
@@ -50,125 +50,139 @@ def reproduce(population, fitness, mutation_rate):
     return new_population
 
 
-def pop_fitness(population, ref_soap, rcut, sigma, max_score=-9999, fit_mean=0, fit_std=1):
+def pop_fitness(population, rcut, sigma, kernel, tgt_atoms, tgt_species, max_score=[-9999,'']):
     """
     Calculates the fitness (ie SOAP similarity score) of the population by generating conformers for each of the
     population molecules, then evaluating their SOAP descriptors and calculating its similarity score with the SOAP
     descriptor of the binding ligand 'field'
 
+    Conformer generation and similarity calculation are the computational bottlenecks  - might be worth splitting the
+    task up with MPI. see return_borders.py in helper.py if you want to do that - make sure you only run the
+    reproduction on the master node (since there is randomness), then broadcast to the other nodes
+
     :param population: list of RDKit molecule objects
-    :param ref_soap: numpy array containing the SOAP descriptor of the binding ligand field
+    :param tgt_atoms: list of ASE atom objects of the target ligand field - from read_xyz
+    :param tgt_species: list of the atomic species present in the target ligand field - from read_xyz
     :param rcut, sigma: SOAP parameters
     :param max_score: Maximum SOAP similarity found so far
-    :param fit_mean: Mean SOAP similarity of initial population (starts at 0)
-    :param fit_std: Stdev of SOAP similarity of initial population
 
     :return: fitness, max_score, fit_mean, fit_std
     """
+    t0 = time.time()
 
     # loop over RDKit mols and turn them into lists of ASE atom objects for dscribe SOAP atomic feature generation
     population_ase = []
     num_list = []
     species = ['C']
+    bad_mols = []
     for m in population:
         m = Chem.AddHs(m)
-        AllChem.EmbedMolecule(m, maxAttempts=1000)
+        conf_result = AllChem.EmbedMolecule(m, maxAttempts=1000)
+        if conf_result != 0:
+            bad_mols.append(m)
+            continue
         m = Chem.RemoveHs(m)
         num_list.append(len(m.GetAtoms()))
-        for i, atom in m.GetAtoms():
+        for i, atom in enumerate(m.GetAtoms()):
             symbol = atom.GetSymbol()
             conf = m.GetConformer()
             population_ase.append(Atoms(symbol, [conf.GetPositions()[i]]))
             if symbol not in species:  # find unique atomic species for SOAP generation
                 species.append(symbol)
+    population.remove(bad_mols) # filter out molecules which have no conformers
 
-    soap_generator = SOAP(species=species, periodic=False, rcut=rcut, nmax=12, lmax=8, sigma=sigma, sparse=True)
+    # Check that we also include the atom types present in the ligand targets
+    for atom in tgt_species:
+        if atom not in species:
+            species.append(atom)
+    t1 = time.time()
+    print('Time taken to generate conformers: {}'.format(t1-t0))
+
+    # Generate SOAP descriptors using dscribe
+    soap_generator = SOAP(species=species, periodic=False, rcut=rcut, nmax=8, lmax=6, sigma=sigma, sparse=True)
     soap = soap_generator.create(population_ase)
+    tgt_soap = soap_generator.create(tgt_atoms)
 
     # normalize SOAP atom descriptors and group by molecule
     soap = normalize(soap, copy=False)
+    tgt_soap = [normalize(tgt_soap, copy=False)]
     soap = split_by_lengths(soap, num_list)
 
+    t2 = time.time()
+    print('Time taken to generate SOAP descriptors: {}'.format(t2-t1))
+
     # TODO make REMatch kernel args as input args
-    re = REMatchKernel(metric="polynomial", degree=3, gamma=1, coef0=0, alpha=0.5, threshold=1e-6,
-                       normalize_kernel=True)
+    if kernel == 'rematch:':
+        soap_similarity = REMatchKernel(metric="polynomial", degree=3, gamma=1, coef0=0, alpha=0.1, threshold=1e-3,
+                                        normalize_kernel=True)
+    elif kernel == 'average':
+        soap_similarity = AverageKernel(metric="polynomial", degree=3, gamma=1, coef0=0, normalize_kernel=True)
+    fitness = soap_similarity.create(soap, tgt_soap)
+    fitness = fitness.flatten()
 
-    fitness = re.create(soap, ref_soap)
-
+    t3 = time.time()
+    print('Time taken to calculate fitness: {}'.format(t3-t2))
     # update max_score, include new champion
     if np.amax(fitness) > max_score[0]:
         max_score = [np.amax(fitness), Chem.MolToSmiles(population[np.argmax(fitness)])]
 
     # normalize fitness to turn them into probability scores
-    fitness = np.maximum((fitness - fit_mean) / fit_std, 0.0)
-
     fitness = fitness / np.sum(fitness)
 
-    return fitness, max_score, fit_mean, fit_std
+    return fitness, max_score
 
 
 def initialise_system(args):
     """
-    Reads in a .csv file and generates a population of RDKit molecules - initialises max score,
-    the mean and stdev fitness scores, and loads in ref_soap
+    Reads in a .csv file and generates a population of RDKit molecules, as well as reading in target ligand coordinates
 
-    :param args: system arguments parsed into main - should contain args.csv, args.tgt, args.rcut, and args.sigma
+    :param args: system arguments parsed into main - should contain args.csv, args.tgt
 
-    :return: population, pop_size, pop_fit, pop_mean, pop_std, max_score
+    :return: population, tgt_atoms, tg_species
     """
     population = []
-    csv = pd.read_csv(args.csv, header=None, names=['SMILES'])
+    csv = pd.read_csv(args.csv, header=0)
     for i, row in csv.iterrows():
         population.append(Chem.MolFromSmiles(row['SMILES']))
-    # mols, num_list, atom_list, species = read_xyz(xyz_file) # mols are a list of ASE atoms objects
-    pop_size = len(population)
 
-    ref_soap = np.load(args.ref_soap)
+    tgt_atoms, _, _, tgt_species = read_xyz(args.tgt)
 
-    # Need to generate initial fitness here
-    pop_fit, max_score, _, _ = pop_fitness(population, ref_soap, args.rcut, args.sigma)
-
-    pop_mean = np.mean(pop_fit)
-    pop_std = np.std(pop_fit)
-
-    csv['fitness'] = pop_fit
-
-    print('\nInitial population:')
-    print('SMILES: {}, Fitness: {}'.format(csv['SMILES'].values, csv['fitness'].values))
-
-    return population, pop_size, pop_fit, pop_mean, pop_std, max_score, ref_soap
+    return population, tgt_atoms, tgt_species
 
 
 def main(args):
     """
-    Runs genetic algorithm - initialise_system generates the starting population and loads in the SOAP descriptors
-    of the binding ligand 'field'. Program then loops over generations, calculates the fitness of the population,
-    prints+saves the highest fitness individual ('champion'), and then updates the population based on the fitness.
+    Runs genetic algorithm - initialise_system generates the starting population. Program then loops over generations,
+    calculates the fitness of the population, prints+saves the highest fitness individual ('champion'),
+    and then updates the population based on the fitness.
 
     :param args: system arguments parsed into program
     :return:
     """
     t0 = time.time()
 
-    co.average_size = args.avg_size  # read what this does
+    co.average_size = args.tgt_size  # read what this does
     co.size_stdev = args.size_stdev
 
-    population, pop_size, fitness, fit_mean, fit_std, max_score, ref_soap  = initialise_system(args)
+    population, tgt_atoms, tgt_species = initialise_system(args)
 
-    print('\nInitial Population Size: {}'.format(pop_size))
+    print('\nInitial Population Size: {}'.format(len(population)))
     print('No. of generations: {}'.format(args.n_gens))
-    print('Mutation rate: {}'.format(args.mr))
+    print('Mutation rate: {}'.format(args.mut_rate))
     print('')
 
-    f = open('champions.dat', 'w')
+    max_score = [-999, '']
+    f = open('data/champions.dat', 'w')
     for generation in range(args.n_gens):
-        print('\nGeneration #{}'.format(generation))
-
-        fitness = pop_fitness(population, ref_soap, args.rcut, args.sigma, max_score, fit_mean, fit_std)
-        population = reproduce(population, fitness, args.mr)
+        print('\nGeneration #{}, population size: {}'.format(generation, len(population)))
+        print('Calculating fitness...')
+        fitness, max_score = pop_fitness(population, args.rcut, args.sigma, args.kernel,
+                                         tgt_atoms, tgt_species, max_score)
+        print('Producing next generation...')
+        population = reproduce(population, fitness, args.mut_rate)
 
         # Think you might want to print out the best-k individuals from each generation - wil leave that to you
-        print('Champion fitness = {} with {}'.format(max_score[0], max_score[1]))
+        print('Champion fitness = {}, smiles = {}'.format(max_score[0], max_score[1]))
         f.write(max_score[1] + '\t' + str(max_score[0]) + '\n')
         f.flush()
 
@@ -178,11 +192,11 @@ def main(args):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('-csv', type=str,
+    parser.add_argument('-csv', type=str, default='data/covid_submissions.csv',
                         help='path to .csv file of initial population.')
-    parser.add_argument('-tgt', type=str,
-                        help='path to .npz file containing SOAP descriptors of the binding fragments.')
-    parser.add_argument('--mut_rate', '-mr', type=float, default=0.01,
+    parser.add_argument('-tgt', type=str, default='data/xyz/all_ligands.xyz',
+                        help='path to .xyz file containing binding fragments coordinates.')
+    parser.add_argument('-mut_rate', type=float, default=0.01,
                         help='Probability of mutations.')
     parser.add_argument('-n_gens', type=int, default=50,
                         help='Number of generations to evolve the population.')
@@ -194,6 +208,8 @@ if __name__ == "__main__":
                         help='rcut for SOAP feature generation.')
     parser.add_argument('-sigma', type=float, default=0.2,
                         help='sigma for SOAP feature generation.')
+    parser.add_argument('-kernel', type=str, default='average',
+                        help='SOAP kernel used for similarity score - either "average" or "rematch"')
     args = parser.parse_args()
 
     main(args)
