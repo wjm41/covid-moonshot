@@ -209,7 +209,7 @@ def main(args):
         if args.tgt2 is not None:
             fitness, max_score = pop_fitness(population, args.rcut, args.sigma, args.kernel, tgt_atoms, tgt_species, tgt_atoms2, max_score)
         else:
-            fitness, max_score = pop_fitness(population, args.rcut, args.sigma, args.kernel, tgt_atoms, tgt_species, max_score)
+            fitness, max_score = pop_fitness(population, args.rcut, args.sigma, args.kernel, tgt_atoms, tgt_species, None,  max_score)
         print('Producing next generation...')
         population = reproduce(population, fitness, args.mut_rate)
 
