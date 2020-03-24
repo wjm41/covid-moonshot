@@ -90,7 +90,8 @@ def pop_fitness(population, rcut, sigma, kernel, tgt_atoms, tgt_species, max_sco
             if symbol not in species:  # find unique atomic species for SOAP generation
                 species.append(symbol)
     if bad_mols != []:
-        population.remove(bad_mols) # filter out molecules which have no conformers
+        for bm in bad_mols:
+            population.remove(bm) # filter out molecules which have no conformers
 
     # Check that we also include the atom types present in the ligand targets
     for atom in tgt_species:
@@ -113,7 +114,7 @@ def pop_fitness(population, rcut, sigma, kernel, tgt_atoms, tgt_species, max_sco
     print('Time taken to generate SOAP descriptors: {}'.format(t2-t1))
 
     # TODO make REMatch kernel args as input args
-    if kernel == 'rematch:':
+    if kernel == 'rematch':
         soap_similarity = REMatchKernel(metric="polynomial", degree=3, gamma=1, coef0=0, alpha=0.1, threshold=1e-3,
                                         normalize_kernel=True)
     elif kernel == 'average':
@@ -173,12 +174,11 @@ def main(args):
     print('')
 
     max_score = [-999, '']
-    f = open('data/champions.dat', 'w')
+    f = open('champions.dat', 'w')
     for generation in range(args.n_gens):
         print('\nGeneration #{}, population size: {}'.format(generation, len(population)))
         print('Calculating fitness...')
-        fitness, max_score = pop_fitness(population, args.rcut, args.sigma, args.kernel,
-                                         tgt_atoms, tgt_species, max_score)
+        fitness, max_score = pop_fitness(population, args.rcut, args.sigma, args.kernel, tgt_atoms, tgt_species, max_score)
         print('Producing next generation...')
         population = reproduce(population, fitness, args.mut_rate)
 
