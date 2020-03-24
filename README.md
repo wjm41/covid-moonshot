@@ -12,16 +12,19 @@ Background on the graph-based genetic algorithm (GB-GA) that I used can be found
 - [RDKit](https://www.rdkit.org/docs/Install.html)
 - pandas
 
+## Data
+Fragment data was preprocessed using `transform.sh` which uses openbabel to conver the .mol files into .xyz, which are then fed into `concat_ligand.py` to concat the atom coordinates into one file.
+
+Candidates were found from this [Google Sheets](https://docs.google.com/spreadsheets/d/1zELgd-kDEkIjRqc_jdKm5EzDQmRrrYAbErghTPkcA5c/edit#gid=0) and the 'SMILES' column is saved in data/covid_submissions.csv
 ## How to use
 running `python GA-soap.py` will start running a genetic algorithm. It uses `crossover.py` and `mutate.py` from Jensen's [Github](https://github.com/jensengroup/GB-GA). Doc-strings and comments in `GA-soap.py` should be enough to help you understand what's going on.
 
-Data was preprocessed using `transform.sh` which uses openbabel to conver the .mol files into .xyz, which are then fed into `concat_ligand.py` to concat the atom coordinates into one file.
-
 ## To-try
 - parallelize conformer generation / similarity calculation with MPI? Takes ~1 minute per generation right now which isn't terrible but could be better
-- improved way of writing best candidates from each generation to a file for visualisation
 - play with GA and SOAP parameters to find optimal candidate(s) ; set `-tgt_size` to average size of the molecules in the submission?
+- I think we should only use submission candidates that include the fragments from site 2 and 11 (which are the only ones I selected); too tired to do it now
 - possibly include fragments in the initial population also
+- improved way of writing best candidates from each generation to a file for visualisation
 - some form of synthesizability scoring?
 - May need better objective function as target ligand field has a LOT of atoms (892)
 - more conformers?
