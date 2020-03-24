@@ -128,7 +128,12 @@ def pop_fitness(population, rcut, sigma, kernel, tgt_atoms, tgt_species, max_sco
     if np.amax(fitness) > max_score[0]:
         max_score = [np.amax(fitness), Chem.MolToSmiles(population[np.argmax(fitness)])]
 
-    # normalize fitness to turn them into probability scores
+    #Print the top 5 scores and corresponding molecules for a particular generation
+    top_scores = np.flip(fitness[np.argsort(fitness)[-5:]])
+    print(top_scores)
+    for i in range(5):
+        print("Mol {}: {} (fitness = {:.3f})".format(i, Chem.MolToSmiles(population[np.argsort(fitness)[-i-1]]), top_scores[i]))
+
     fitness = fitness / np.sum(fitness)
 
     return fitness, max_score
@@ -174,7 +179,12 @@ def main(args):
     print('')
 
     max_score = [-999, '']
+<<<<<<< HEAD
     f = open('champions.dat', 'w')
+=======
+    f = open('data/champions.dat', 'w')
+
+>>>>>>> 7fbe49c9deaa46de90f96b518f7edc89b80f7fc2
     for generation in range(args.n_gens):
         print('\nGeneration #{}, population size: {}'.format(generation, len(population)))
         print('Calculating fitness...')
