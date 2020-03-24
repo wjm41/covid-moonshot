@@ -16,10 +16,3 @@ file = open('xyz/all_ligands.xyz','w')
 file.write(str(num_atoms))
 file.write('\n\n')
 file.writelines(full_lines)
-
-# SOAP_array = np.load('npy/' + ligands[0] + '.npy', allow_pickle=True)
-#
-# for i in range(len(ligands)-1):
-#     SOAP_array = np.vstack((SOAP_array, np.load('npy/'+ligands[i+1]+'.npy', allow_pickle=True)))
-#
-# np.save('npy/ligand_soap.npy', SOAP_array.reshape(-1,1))
