@@ -89,7 +89,8 @@ def pop_fitness(population, rcut, sigma, kernel, tgt_atoms, tgt_species, max_sco
             population_ase.append(Atoms(symbol, [conf.GetPositions()[i]]))
             if symbol not in species:  # find unique atomic species for SOAP generation
                 species.append(symbol)
-    population.remove(bad_mols) # filter out molecules which have no conformers
+    if bad_mols != []:
+        population.remove(bad_mols) # filter out molecules which have no conformers
 
     # Check that we also include the atom types present in the ligand targets
     for atom in tgt_species:
