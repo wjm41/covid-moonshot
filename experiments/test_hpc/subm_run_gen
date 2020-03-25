@@ -12,14 +12,14 @@
 #! Name of the job:
 #SBATCH -J covid_test
 #! Which project should be charged:
-#SBATCH -A LEE-SL3-CPU
+#SBATCH -A LEE-WJM41-SL2-CPU
 #! How many whole nodes should be allocated?
 #SBATCH --nodes=1
 #! How many (MPI) tasks will there be in total? (<= nodes*32)
 #! The skylake/skylake-himem nodes have 32 CPUs (cores) each.
-#SBATCH --ntasks=1
+#SBATCH --ntasks=32
 #! How much wallclock time will be required?
-#SBATCH --time=00:40:00
+#SBATCH --time=00:10:00
 #! What types of email messages do you wish to receive?
 #SBATCH --mail-type=ALL
 #! Uncomment this to prevent the job from being requeued (e.g. if
@@ -57,9 +57,7 @@ module load rhel7/default-peta4            # REQUIRED - loads the basic environm
 #! Insert additional module load commands after this line if needed:
 
 module load miniconda3-4.5.4-gcc-5.4.0-hivczbz
-
-source activate covid 
-
+source activate rdkit-env
 #! Full path to application executable: 
 application="run_gen.sh"
 
