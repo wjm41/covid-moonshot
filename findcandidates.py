@@ -63,7 +63,7 @@ def main(args):
     f2 = open(args.ncov_inds, 'r')
     non_covalent_indices = f2.read().splitlines()
 
-    candidate_file = open('data/overlapping_fragments.txt', 'w')
+    candidate_file = open(args.out, 'w')
     candidate_file.write('covalent,non_covalent\n')
     n_overlaps = 0
     for u in covalent_indices:
