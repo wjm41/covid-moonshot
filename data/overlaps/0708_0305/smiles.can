@@ -1,0 +1,6 @@
+[C][C]/N=[C]\[C].[C]#N	0708_0305/0305_frag.xyz
+[C][C][N]c1[c][c]c([c]n1)C#N	0708_0305/0305_orig.xyz
+[C][C][C]=[N]	0708_0305/0305_overlap.xyz
+[C]S[C](C(=O)[N][N]C(=O)[C])[C].[C]	0708_0305/0708_frag.xyz
+[C]C(=O)[N][N]C(=O)c1[c]c2c(s1)[C][C][C][C]2	0708_0305/0708_orig.xyz
+[C][C][C].[C]	0708_0305/0708_overlap.xyz
