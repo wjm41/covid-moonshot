@@ -1,0 +1,6 @@
+[C][C][N].[C]#N	0692_0305/0305_frag.xyz
+[C][C][N]c1[c][c]c([c]n1)C#N	0692_0305/0305_orig.xyz
+[c]1[c][c][c]n[c]1	0692_0305/0305_overlap.xyz
+[C]N1[C][C]N([C][C]1)C(=O)[C].[C]	0692_0305/0692_frag.xyz
+[C]c1[c][c][c]c([c]1)[C]N1[C][C]N([C][C]1)C(=O)[C]	0692_0305/0692_orig.xyz
+[c]1[c][c][c][c][c]1	0692_0305/0692_overlap.xyz

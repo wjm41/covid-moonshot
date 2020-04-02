@@ -1,0 +1,6 @@
+[C][C][N][C]c1nnc(s1)[C]	0770_0395/0395_frag.xyz
+F[C]1[C][C][C]N([C]1)[C]c1nnc(s1)[C]	0770_0395/0395_orig.xyz
+[C][C](F)[C]	0770_0395/0395_overlap.xyz
+[C]/[C]=[C]/[C]N1[C][C]N([C][C]1)C(=O)[C]	0770_0395/0770_frag.xyz
+Clc1[c][c][c]c([c]1)[C]N1[C][C]N([C][C]1)C(=O)[C]	0770_0395/0770_orig.xyz
+[C]C(=[C])Cl	0770_0395/0770_overlap.xyz

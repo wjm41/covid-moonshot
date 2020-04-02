@@ -1,0 +1,6 @@
+[C]N([C]c1noc([c]1)[C])[C].[C]	1478_0397/0397_frag.xyz
+[C]N(C(=O)[N][C]1[C][C]1)[C]c1noc([c]1)[C]	1478_0397/0397_orig.xyz
+[C][C][N].[O]	1478_0397/0397_overlap.xyz
+[C]/[C]=[C]\[N].[C][C][N]	1478_0397/1478_frag.xyz
+[C]C(=O)[N]c1[c][c][c]nc1Cl	1478_0397/1478_orig.xyz
+[C][C]Cl.[O]	1478_0397/1478_overlap.xyz

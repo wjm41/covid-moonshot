@@ -1,0 +1,6 @@
+[C]1=[C][C]2C(=N[C]=[C]2)N=[C]1.[C][N][C]=O.[C][N]	1382_1093/1093_frag.xyz
+[C]N1[C][C]N([C][C]1)C(=O)[C]C1=[C]N=C2[C]1[C]=[C][C]=N2	1382_1093/1093_orig.xyz
+[C][C].[C].[C]	1382_1093/1093_overlap.xyz
+[C][C]/N=[C]/[C].Cl[C]=[C].[C]	1382_1093/1382_frag.xyz
+[C]C(=O)[N][C](c1[c][c][c]c([c]1)Cl)[C]	1382_1093/1382_orig.xyz
+[C][C].[O].[C]	1382_1093/1382_overlap.xyz
