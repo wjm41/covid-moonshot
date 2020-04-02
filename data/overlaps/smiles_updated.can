@@ -1,0 +1,112 @@
+[C]S(=O)(=O)[N]	0692_0072_updated/0072_frag.xyz
+[C]S(=O)(=O)[N][C][C]c1[c][c][c][c][c]1	0692_0072_updated/0072_orig.xyz
+[C]/[C]=[C]\[C].[C]	0692_0072_updated/0072_overlap.xyz
+[C]C(=O)N1[C][C][N][C][C]1	0692_0072_updated/0692_frag.xyz
+[C]c1[c][c][c]c([c]1)[C]N1[C][C]N([C][C]1)C(=O)[C]	0692_0072_updated/0692_orig.xyz
+[C][C]=C([C])[C]	0692_0072_updated/0692_overlap.xyz
+ 
+[C]/[C]=[C]\[C][C][N]C(=O)[C]	0692_0104_updated/0104_frag.xyz
+[C]C(=O)[N][C][C]c1[c][n]c2c1[c]c(F)[c][c]2	0692_0104_updated/0104_orig.xyz
+[C]/[C]=[C]\[C].[C]	0692_0104_updated/0104_overlap.xyz
+[C]N1[C][C]N([C][C]1)C(=O)[C]	0692_0104_updated/0692_frag.xyz
+[C]c1[c][c][c]c([c]1)[C]N1[C][C]N([C][C]1)C(=O)[C]	0692_0104_updated/0692_orig.xyz
+[C][C][C].[C][C]	0692_0104_updated/0692_overlap.xyz
+ 
+[C]/[C]=C(/S(=O)(=O)[N])\[C]	0692_0195_updated/0195_frag.xyz
+[C]N1[C][C][C]c2c1[c]c([c][c]2)S(=O)(=O)[N]	0692_0195_updated/0195_orig.xyz
+[C]/N=[C]\[C]	0692_0195_updated/0195_overlap.xyz
+[C][C]N1[C][C]N([C][C]1)C(=O)[C]	0692_0195_updated/0692_frag.xyz
+[C]c1[c][c][c]c([c]1)[C]N1[C][C]N([C][C]1)C(=O)[C]	0692_0195_updated/0692_orig.xyz
+[C][C][C].[C]	0692_0195_updated/0692_overlap.xyz
+ 
+[C][C][C]([C][C])[O]	0692_0387_updated/0387_frag.xyz
+[O][C]1[C][C]N([C][C]1)[C]c1[c]s[c][c]1	0692_0387_updated/0387_orig.xyz
+[C][C].[N].[C]	0692_0387_updated/0387_overlap.xyz
+[C]C(=O)N1[C][C][N][C][C]1	0692_0387_updated/0692_frag.xyz
+[C]c1[c][c][c]c([c]1)[C]N1[C][C]N([C][C]1)C(=O)[C]	0692_0387_updated/0692_orig.xyz
+[C][C][C].[C]	0692_0387_updated/0692_overlap.xyz
+ 
+[C][N][C]c1noc([c]1)[C]	0692_0397_updated/0397_frag.xyz
+[C]N(C(=O)[N][C]1[C][C]1)[C]c1noc([c]1)[C]	0692_0397_updated/0397_orig.xyz
+[N][C]=O.[C]	0692_0397_updated/0397_overlap.xyz
+[C][C]N([C]c1[c][c][c]c([c]1)[C])[C]	0692_0397_updated/0692_frag.xyz
+[C]c1[c][c][c]c([c]1)[C]N1[C][C]N([C][C]1)C(=O)[C]	0692_0397_updated/0692_orig.xyz
+[C][N][C]=O	0692_0397_updated/0692_overlap.xyz
+ 
+[c]1[c][c][c]n[c]1.[C][C][N][C]=O	0692_0434_updated/0434_frag.xyz
+O=C([N]c1[c][c][c]n[c]1)[N]c1[c][c][c][c][c]1	0692_0434_updated/0434_orig.xyz
+[C][C][C]=[C].[N]	0692_0434_updated/0434_overlap.xyz
+[C][C][C]N([C][C][N]C(=O)[C])[C]	0692_0434_updated/0692_frag.xyz
+[C]c1[c][c][c]c([c]1)[C]N1[C][C]N([C][C]1)C(=O)[C]	0692_0434_updated/0692_orig.xyz
+[C]/[C]=[C]\[C].[C]	0692_0434_updated/0692_overlap.xyz
+ 
+[C][C]([C]N1[C][C]N([C][C]1)C(=O)[C])[C]	0692_0946_updated/0692_frag.xyz
+[C]c1[c][c][c]c([c]1)[C]N1[C][C]N([C][C]1)C(=O)[C]	0692_0946_updated/0692_orig.xyz
+[C]/[C]=[C]/[C]	0692_0946_updated/0692_overlap.xyz
+[C]/[C]=[C]/S(=O)(=O)[N]	0692_0946_updated/0946_frag.xyz
+Brc1[c][c]c([c][c]1)S(=O)(=O)[N]	0692_0946_updated/0946_orig.xyz
+[C]/[C]=[C]/Br	0692_0946_updated/0946_overlap.xyz
+ 
+[C]N1[C][C]N([C][C]1)C(=O)[C]	0692_1249_updated/0692_frag.xyz
+[C]c1[c][c][c]c([c]1)[C]N1[C][C]N([C][C]1)C(=O)[C]	0692_1249_updated/0692_orig.xyz
+[C][C]/[C]=[C]\[C][C].[C]	0692_1249_updated/0692_overlap.xyz
+[C][N]C(=O)N1[C][C]O[C][C]1.[C]#N	0692_1249_updated/1249_frag.xyz
+N#Cc1[c][c]c([c][c]1)[C][N]C(=O)N1[C][C]O[C][C]1	0692_1249_updated/1249_orig.xyz
+[C][C]/[C]=[C]\[C][C].[C]	0692_1249_updated/1249_overlap.xyz
+ 
+[C]S(=O)(=O)[N]	0692_0072_updated/0072_frag.xyz
+[C]S(=O)(=O)[N][C][C]c1[c][c][c][c][c]1	0692_0072_updated/0072_orig.xyz
+[C]/[C]=[C]\[C].[C]	0692_0072_updated/0072_overlap.xyz
+[C]C(=O)N1[C][C][N][C][C]1	0692_0072_updated/0692_frag.xyz
+[C]c1[c][c][c]c([c]1)[C]N1[C][C]N([C][C]1)C(=O)[C]	0692_0072_updated/0692_orig.xyz
+[C][C]=C([C])[C]	0692_0072_updated/0692_overlap.xyz
+ 
+[C]/[C]=[C]\[C][C][N]C(=O)[C]	0692_0104_updated/0104_frag.xyz
+[C]C(=O)[N][C][C]c1[c][n]c2c1[c]c(F)[c][c]2	0692_0104_updated/0104_orig.xyz
+[C]/[C]=[C]\[C].[C]	0692_0104_updated/0104_overlap.xyz
+[C]N1[C][C]N([C][C]1)C(=O)[C]	0692_0104_updated/0692_frag.xyz
+[C]c1[c][c][c]c([c]1)[C]N1[C][C]N([C][C]1)C(=O)[C]	0692_0104_updated/0692_orig.xyz
+[C][C][C].[C][C]	0692_0104_updated/0692_overlap.xyz
+ 
+[C]/[C]=C(/S(=O)(=O)[N])\[C]	0692_0195_updated/0195_frag.xyz
+[C]N1[C][C][C]c2c1[c]c([c][c]2)S(=O)(=O)[N]	0692_0195_updated/0195_orig.xyz
+[C]/N=[C]\[C]	0692_0195_updated/0195_overlap.xyz
+[C][C]N1[C][C]N([C][C]1)C(=O)[C]	0692_0195_updated/0692_frag.xyz
+[C]c1[c][c][c]c([c]1)[C]N1[C][C]N([C][C]1)C(=O)[C]	0692_0195_updated/0692_orig.xyz
+[C][C][C].[C]	0692_0195_updated/0692_overlap.xyz
+ 
+[C][C][C]([C][C])[O]	0692_0387_updated/0387_frag.xyz
+[O][C]1[C][C]N([C][C]1)[C]c1[c]s[c][c]1	0692_0387_updated/0387_orig.xyz
+[C][C].[N].[C]	0692_0387_updated/0387_overlap.xyz
+[C]C(=O)N1[C][C][N][C][C]1	0692_0387_updated/0692_frag.xyz
+[C]c1[c][c][c]c([c]1)[C]N1[C][C]N([C][C]1)C(=O)[C]	0692_0387_updated/0692_orig.xyz
+[C][C][C].[C]	0692_0387_updated/0692_overlap.xyz
+ 
+[C][N][C]c1noc([c]1)[C]	0692_0397_updated/0397_frag.xyz
+[C]N(C(=O)[N][C]1[C][C]1)[C]c1noc([c]1)[C]	0692_0397_updated/0397_orig.xyz
+[N][C]=O.[C]	0692_0397_updated/0397_overlap.xyz
+[C][C]N([C]c1[c][c][c]c([c]1)[C])[C]	0692_0397_updated/0692_frag.xyz
+[C]c1[c][c][c]c([c]1)[C]N1[C][C]N([C][C]1)C(=O)[C]	0692_0397_updated/0692_orig.xyz
+[C][N][C]=O	0692_0397_updated/0692_overlap.xyz
+ 
+[c]1[c][c][c]n[c]1.[C][C][N][C]=O	0692_0434_updated/0434_frag.xyz
+O=C([N]c1[c][c][c]n[c]1)[N]c1[c][c][c][c][c]1	0692_0434_updated/0434_orig.xyz
+[C][C][C]=[C].[N]	0692_0434_updated/0434_overlap.xyz
+[C][C][C]N([C][C][N]C(=O)[C])[C]	0692_0434_updated/0692_frag.xyz
+[C]c1[c][c][c]c([c]1)[C]N1[C][C]N([C][C]1)C(=O)[C]	0692_0434_updated/0692_orig.xyz
+[C]/[C]=[C]\[C].[C]	0692_0434_updated/0692_overlap.xyz
+ 
+[C][C]([C]N1[C][C]N([C][C]1)C(=O)[C])[C]	0692_0946_updated/0692_frag.xyz
+[C]c1[c][c][c]c([c]1)[C]N1[C][C]N([C][C]1)C(=O)[C]	0692_0946_updated/0692_orig.xyz
+[C]/[C]=[C]/[C]	0692_0946_updated/0692_overlap.xyz
+[C]/[C]=[C]/S(=O)(=O)[N]	0692_0946_updated/0946_frag.xyz
+Brc1[c][c]c([c][c]1)S(=O)(=O)[N]	0692_0946_updated/0946_orig.xyz
+[C]/[C]=[C]/Br	0692_0946_updated/0946_overlap.xyz
+ 
+[C]N1[C][C]N([C][C]1)C(=O)[C]	0692_1249_updated/0692_frag.xyz
+[C]c1[c][c][c]c([c]1)[C]N1[C][C]N([C][C]1)C(=O)[C]	0692_1249_updated/0692_orig.xyz
+[C][C]/[C]=[C]\[C][C].[C]	0692_1249_updated/0692_overlap.xyz
+[C][N]C(=O)N1[C][C]O[C][C]1	0692_1249_updated/1249_frag.xyz
+N#Cc1[c][c]c([c][c]1)[C][N]C(=O)N1[C][C]O[C][C]1	0692_1249_updated/1249_orig.xyz
+[C][C]/[C]=[C]\[C][C].[C]	0692_1249_updated/1249_overlap.xyz
+ 
