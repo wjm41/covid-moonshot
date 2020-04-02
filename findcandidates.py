@@ -1,5 +1,6 @@
 """Short script for outputting covalent-noncovalent fragment pairs that overlap in space"""
 import argparse
+import subprocess
 import os
 
 import numpy as np
@@ -83,6 +84,7 @@ def main(args):
                                                                                n_overlap=args.n_overlap,
                                                                                verbose=args.verbose)
             if overlap:
+                subprocess.checkoutput
                 candidate_file.write(u+','+v+'\n')
                 n_overlaps+=1
                 if args.write_atoms:
