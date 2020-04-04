@@ -46,7 +46,7 @@ def main(args):
         else:
             break
     scaff_mols = [MolFromSmiles(scaffold) for scaffold in scaff_list]
-    img = Draw.MolsToGridImage(scaff_mols, molsPerRow=5, subImgSize=(150,150),
+    img = Draw.MolsToGridImage(scaff_mols, molsPerRow=5, subImgSize=(200,200),
                                legends=['counts = {}'.format(len(scaffold_dict[scaffold])) for scaffold in scaff_list])
     img.save('data/scaff_grid.png')
 

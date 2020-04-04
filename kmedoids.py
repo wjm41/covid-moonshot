@@ -3,7 +3,7 @@ import argparse
 import numpy as np
 import pandas as pd
 from rdkit import DataStructs
-from rdkit.Chem import MolFromSmiles, AllChem
+from rdkit.Chem import Draw, MolFromSmiles, AllChem
 from rdkit.Chem.Scaffolds.MurckoScaffold import MurckoScaffoldSmilesFromSmiles
 import matplotlib.pyplot as plt
 
@@ -134,8 +134,11 @@ def main(args):
     M, C = kMedoids(D_matrix, args.K)
 
     print('\nmedoids:')
-    for point_idx in M:
-        print(data['SMILES'].iloc[point_idx])
+    medoid_list = data.iloc[M]
+    smiles_list = [smiles for smiles in medoid_list['SMILES'].values]
+
+    img = Draw.MolsToGridImage(medoid_list['mol'].values, molsPerRow=5, subImgSize=(400,400))
+    img.save('data/medoids_grid.png')
 
     print('\nclustering result:')
     data['cluster'] = 0
