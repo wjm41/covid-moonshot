@@ -137,7 +137,8 @@ def main(args):
     medoid_list = data.iloc[M]
     smiles_list = [smiles for smiles in medoid_list['SMILES'].values]
 
-    img = Draw.MolsToGridImage(medoid_list['mol'].values, molsPerRow=5, subImgSize=(400,400))
+    img = Draw.MolsToGridImage(medoid_list['mol'].values, molsPerRow=5, subImgSize=(300,300),
+                               legends=['Cluster #{}'.format(i+1) for i in range(len(medoid_list))])
     img.save('data/medoids_grid.png')
 
     print('\nclustering result:')
