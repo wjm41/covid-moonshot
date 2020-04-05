@@ -43,7 +43,7 @@ def main(args):
         #print(scaffold_dict)
     data['scaffold'] = scaff_list
     data['scaffold_generic'] = scaff_generic_list
-    data[['SMILES','TITLE','dockvalent_id','scaffold','scaffold_generic']].to_csv('data/unique_docked_smiles_by_scaffold.csv', index=False)
+    data.drop(columns='mol').to_csv('data/unique_docked_smiles_by_scaffold.csv', index=False)
 
     scaff_list = []
     print('\nNumber of distinct scaffolds: {}'.format(len(scaffold_dict)))
