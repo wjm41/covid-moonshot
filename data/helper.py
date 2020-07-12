@@ -1,31 +1,6 @@
 import numpy as np
 from ase.atoms import Atoms
 
-def read_xyz(config_file,
-            index=':'):
-        species={'C'}
-        atom_list = []
-        mol_list = []
-        num_list = []
-        ifs = open(config_file, 'r')
-        while True:
-            header = ifs.readline().split()
-            if header != []:
-                assert len(header) == 1
-                n_atoms = int(header[0])
-                num_list.append(n_atoms)
-                config = ConfigASE()
-                config.create(n_atoms, ifs)
-                atom_list.append(config.get_chemical_symbols())
-                atoms = set(config.get_chemical_symbols())
-                if (atoms.issubset(species)==False):
-                    species = species.union(atoms)
-                xyz = config.get_positions()
-                mol = Atoms(symbols=config.get_chemical_symbols(), positions= xyz)
-                mol_list.append(mol)
-            else: break
-        return mol_list, num_list, atom_list, species
-
 class ConfigASE(object):
     def __init__(self):
         self.info = {}
@@ -81,7 +56,8 @@ class ConfigASE(object):
             # In between key-value pairs?
             elif status == "":
                 if header[pos1] == ' ':
-                    pos0 += 1 pos1 += 1
+                    pos0 += 1
+                    pos1 += 1
                 else:
                     status_out = "<"
             else:
@@ -119,6 +95,31 @@ class ConfigASE(object):
             self.symbols.append(name)
         self.positions = np.array(self.positions)
         return
+
+def read_xyz(config_file,
+            index=':'):
+        species={'C'}
+        atom_list = []
+        mol_list = []
+        num_list = []
+        ifs = open(config_file, 'r')
+        while True:
+            header = ifs.readline().split()
+            if header != []:
+                assert len(header) == 1
+                n_atoms = int(header[0])
+                num_list.append(n_atoms)
+                config = ConfigASE()
+                config.create(n_atoms, ifs)
+                atom_list.append(config.get_chemical_symbols())
+                atoms = set(config.get_chemical_symbols())
+                if (atoms.issubset(species)==False):
+                    species = species.union(atoms)
+                xyz = config.get_positions()
+                mol = Atoms(symbols=config.get_chemical_symbols(), positions= xyz)
+                mol_list.append(mol)
+            else: break
+        return mol_list, num_list, atom_list, species
 
 def split_by_lengths(seq, num):
     out_list = []
