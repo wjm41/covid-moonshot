@@ -1,6 +1,0 @@
-[C][C]/C(=N\[C])/C#N.[C]O[C][C]	1385_1077/1077_frag.xyz
-N#Cc1[c][c]c([c]n1)N1[C][C]O[C][C][C]1	1385_1077/1077_orig.xyz
-[C]N([C])[C]	1385_1077/1077_overlap.xyz
-[C]C(=O)N1[C][C][N][C][C]1.[C][C]Br	1385_1077/1385_frag.xyz
-[C]C(=O)N1[C][C]N([C][C]1)[C]c1[c][c]c(s1)Br	1385_1077/1385_orig.xyz
-[C][C]([S])[C]	1385_1077/1385_overlap.xyz

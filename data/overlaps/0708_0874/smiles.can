@@ -1,6 +1,0 @@
-[C]C(=O)[N][N]C(=O)[C]([S])[C].[C]	0708_0874/0708_frag.xyz
-[C]C(=O)[N][N]C(=O)c1[c]c2c(s1)[C][C][C][C]2	0708_0874/0708_orig.xyz
-[C][C][C][C]=[C]	0708_0874/0708_overlap.xyz
-[N]C(=O)[C]1[C][C][C][C]1	0708_0874/0874_frag.xyz
-[N]C(=O)[C]1[C][C][C][C]1c1[c]s[c][c]1	0708_0874/0874_orig.xyz
-[c]1[c][c][c]s1	0708_0874/0874_overlap.xyz
