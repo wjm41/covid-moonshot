@@ -84,13 +84,12 @@ def main(args):
                                                                                n_overlap=args.n_overlap,
                                                                                verbose=args.verbose)
             if overlap:
-                subprocess.checkoutput
                 candidate_file.write(u+','+v+'\n')
                 n_overlaps+=1
                 if args.write_atoms:
 
                     # copy original .xyz files
-                    # os.system('mkdir data/overlaps/'+u+'_'+v)
+                    os.system('mkdir data/overlaps/'+u+'_'+v)
                     os.system('cp data/covalent/Mpro-x'+u+'_0.xyz data/overlaps/'+u+'_'+v+'/'+u+'_orig.xyz')
                     os.system('cp data/non_covalent/Mpro-x'+v+'_0.xyz data/overlaps/'+u+'_'+v+'/'+v+'_orig.xyz')
 

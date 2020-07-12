@@ -1,17 +1,7 @@
 import numpy as np
-import pandas as pd
 from ase.atoms import Atoms
 
-def find_duplicate_submissions(mol_list, verbose=False):
-    df = pd.read_csv('data/covid_submissions_03_31_2020.csv')
-    submissions = df['SMILES'].values
 
-    duplicate_smiles = set(mol_list).intersection(submissions)
-    if verbose:
-        print('Molecules already in submissions: {}'.format(duplicate_smiles))
-    print('Number of duplicated molecules: {}'.format(len(duplicate_smiles)))
-
-    return duplicate_smiles
 def read_xyz(config_file,
              index=':'):
     mol_list = []
