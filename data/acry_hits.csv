@@ -1,0 +1,5 @@
+SMILES
+C=CC(=O)N(c1ccc(C(C)(C)C)cc1)C(C(=O)NCCc1cccc(F)c1)c1cccnc1
+C=CC(=O)N(c1ccc(C(C)(C)C)cc1)C(C(=O)Nc1ccc(OC)cc1OC)c1cccnc1
+C=CC(=O)N(c1ccc(C(C)(C)C)cc1)C(C(=O)NCCc1cccc(F)c1)c1cncc(Cl)c1
+C=CC(=O)N(c1ccc(C(C)(C)C)cc1)C(C(=O)NCCc1cccc(F)c1)c1cncc(C)c1
